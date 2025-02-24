@@ -1,0 +1,20 @@
+stages:
+  - build
+  - test
+  - sonar
+  - buildImage
+  - deploy
+
+variables:
+  PROJECT_PREFIX: "pn"
+  CI_PROJECT_NAMESPACE: "company-pn"
+
+include:
+  - project: 'gitops/templates'
+    ref: master
+    file:
+      - '/gitlab-ci/.build.yml'
+      - '/gitlab-ci/.test.yml'
+      - '/gitlab-ci/.sonar.yml'
+      - '/gitlab-ci/.buildImage.yml'
+      - '/gitlab-ci/.deploy.yml'

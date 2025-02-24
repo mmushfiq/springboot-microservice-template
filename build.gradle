@@ -1,0 +1,172 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'java'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'org.sonarqube' version '4.4.1.3373'
+    id 'org.owasp.dependencycheck' version '9.0.9'
+    id "com.gorylenko.gradle-git-properties" version '2.4.1'
+}
+
+group = 'com.company.project'
+version = properties.projectVersion
+
+java {
+    sourceCompatibility = '21'
+}
+
+def pnCommonLibVersion = System.getenv("PN_COMMON_LIB_VERSION") ?: "0.0.1" // Default version
+println "\u001B[32mpnCommonLibVersion version is ${pnCommonLibVersion}\u001B[0m"
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven {
+        name "GitLab"
+        url "https://gitlab.company.com/api/v4/groups/${gitlabGroupId}/-/packages/maven"
+        credentials(HttpHeaderCredentials) {
+            name = 'Deploy-Token'
+            value = gitlabDeployToken
+        }
+        authentication {
+            header(HttpHeaderAuthentication)
+        }
+    }
+}
+
+ext {
+    set('springCloudVersion', "2023.0.3")
+    set('javaVersion', System.getProperty("java.version"))
+    set('gradleVersion', project.getGradle().getGradleVersion())
+}
+
+jar {
+    enabled = false
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "io.micrometer:micrometer-tracing-bridge-otel"
+    implementation "io.opentelemetry:opentelemetry-exporter-otlp"
+    runtimeOnly "io.micrometer:micrometer-registry-prometheus"
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    implementation "io.github.openfeign:feign-okhttp"
+    implementation "io.github.openfeign:feign-micrometer"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    testCompileOnly "org.projectlombok:lombok"
+    testAnnotationProcessor "org.projectlombok:lombok"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    implementation "com.company.project:springboot-microservice-common-lib:${pnCommonLibVersion}"
+    testImplementation "com.tngtech.archunit:archunit-junit5:${archUnitVersion}"
+    implementation "net.logstash.logback:logstash-logback-encoder:${logstashLogbackVersion}"
+    implementation "commons-io:commons-io:${commonsIoVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    /*** postgresql ***/
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    runtimeOnly "org.postgresql:postgresql"
+    implementation "org.liquibase:liquibase-core"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.register('extractCheckstyleConfigFromCommonLib', Copy) {
+    from zipTree(configurations.compileClasspath.find { it.name.startsWith("springboot-microservice-common-lib") })
+    include 'checkstyle.xml'
+    into "${rootProject.projectDir}/checkstyle"
+}
+
+checkstyle {
+    toolVersion '10.14.2'
+    configDirectory = file("${rootProject.projectDir}/checkstyle")
+}
+
+checkstyleMain.dependsOn extractCheckstyleConfigFromCommonLib
+checkstyleTest.dependsOn extractCheckstyleConfigFromCommonLib
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'com/company/project/template/Application.java',
+                    'com/company/project/template/client/**',
+                    'com/company/project/template/config/**',
+                    'com/company/project/template/dao/**',
+                    'com/company/project/template/exception/**',
+                    'com/company/project/template/mapper/**',
+                    'com/company/project/template/model/**',
+                    'com/company/project/template/scheduler/**'
+            ])
+        }))
+    }
+
+    sonar {
+        properties {
+            property 'sonar.coverage.exclusions',
+                    "**/Application.java," +
+                            "**/client/**," +
+                            "**/config/**," +
+                            "**/dao/**," +
+                            "**/exception/**," +
+                            "**/mapper/**," +
+                            "**/model/**," +
+                            "**/scheduler/**"
+        }
+    }
+}
+
+tasks.named('sonarqube'){
+    dependsOn test
+}
+
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    with copySpec {
+        from 'src/main/resources'
+        include '**/application*.yml'
+        include '**/application*.yaml'
+        include '**/application*.properties'
+        project.properties.findAll().each {
+            prop ->
+                if (prop.value != null && prop.value instanceof String) {
+                    filter(ReplaceTokens, tokens: [(prop.key): prop.value])
+                    filter(ReplaceTokens, tokens: [('project.' + prop.key): prop.value])
+                }
+        }
+    }
+    duplicatesStrategy = 'INCLUDE'
+}
+
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')  // disabled javadoc warnings

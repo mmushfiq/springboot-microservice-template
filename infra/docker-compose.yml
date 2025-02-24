@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  redis:
+    container_name: redis
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    restart: always
+    command: redis-server
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.9-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # jaeger UI
+      - "4317:4317"   # collector grpc
+      - "4318:4318"   # collector http
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+volumes:
+  mongodb_data:

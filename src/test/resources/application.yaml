@@ -1,0 +1,9 @@
+logging:
+  config: classpath:common-logback-test.xml
+  level:
+    ROOT: INFO
+    com.company.project: DEBUG
+
+spring:
+  application:
+    name: ms-template-project

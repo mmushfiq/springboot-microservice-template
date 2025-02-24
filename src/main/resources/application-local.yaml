@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    ROOT: info
+    com.company.project: trace
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+springdoc:
+  swagger-ui:
+    enabled: true
+
+spring:
+  main:
+    banner-mode: log
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pn_template_project
+    username: postgres
+    password: postgres
+    hikari:
+      maximum-pool-size: 3

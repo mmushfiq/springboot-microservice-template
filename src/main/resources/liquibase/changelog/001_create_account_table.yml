@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_create_account_table
+      author: Mushfig Mammadov
+      changes:
+        - createTable:
+            tableName: account
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_number
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: account_holder_name
+                  type: varchar(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: decimal
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP(3)
+                  defaultValueComputed: now()
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP(3)
+                  defaultValueComputed: now()
+            remarks: This is account table to store account details.

@@ -1,0 +1,79 @@
+logging:
+  config: classpath:common-logback-spring.xml
+  level:
+    ROOT: info
+    com.company.project: ${PN_PACKAGE_LOG_LEVEL}
+    net.ttddyy.dsproxy.listener: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, prometheus
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  swagger-ui:
+    enabled: false
+
+spring:
+  application:
+    name: ms-template-project
+  main:
+    banner-mode: "off"
+  threads:
+    virtual:
+      enabled: true
+  liquibase:
+    change-log: classpath:liquibase/changelog-master.yaml
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_HOST_PORT}/pn_template_project
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASS}
+    hikari:
+      poolName: MsTemplateProjectHikariPool
+      auto-commit: false
+      maximum-pool-size: ${HIKARICP_DEFAULT_POOL_SIZE}
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+
+jdbc:
+  datasource-proxy:
+    query:
+      enable-logging: ${DS_PROXY_ENABLED:true}
+    slow-query:
+      enable-logging: ${DS_PROXY_ENABLED:true}
+    multiline: false
+
+info:
+  application:
+    name: ${spring.application.name}
+    java-version: '@javaVersion@'
+    gradle-version: '@gradleVersion@'
+    spring-boot-version: '@springBootVersion@'
+    spring-cloud-version: '@springCloudVersion@'
+    common-lib-version: '@pnCommonLibVersion@'
+
+application:
+  interceptor:
+    common-request:
+      exclude-path-patterns: /swagger**/**,/**/api-docs,/error,/favicon.ico
+  swagger:
+    info:
+      version: 1.0
+      title: "${spring.application.name} Rest API"
+      description: "Spring Boot REST API for ${spring.application.name}"

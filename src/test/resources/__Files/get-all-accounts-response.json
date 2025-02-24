@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "customerId": "111",
+    "accountNumber": "123456789",
+    "accountHolderName": "John Doe",
+    "accountType": "SAVING",
+    "balance": 0,
+    "currency": "USD"
+  }
+]

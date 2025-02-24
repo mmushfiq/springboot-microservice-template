@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002_load_data_to_account_table
+      author: Mushfiq Mammadov
+      changes:
+        - loadData:
+            encoding: UTF-8
+            file: liquibase/data/account.csv
+            separator: ;
+            tableName: account
