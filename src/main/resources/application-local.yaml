@@ -25,3 +25,8 @@ spring:
     password: postgres
     hikari:
       maximum-pool-size: 3
+
+application:
+  client:
+    notification:
+      url: http://localhost:8081

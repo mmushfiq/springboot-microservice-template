@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface TestConstants {
 
-    String BASE_PATH = "/v1/template-project";
+    String BASE_PATH = "/template-project";
     Long ID = 1L;
     String TRACE_ID = "d19651710515fd53dde625f6d0443cef";
     Map<String, String> PN_HEADERS = Map.of(PN_LANGUAGE, "en");

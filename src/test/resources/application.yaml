@@ -7,3 +7,8 @@ logging:
 spring:
   application:
     name: ms-template-project
+
+application:
+  client:
+    notification:
+      url: http://localhost:8081

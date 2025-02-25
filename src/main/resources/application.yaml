@@ -77,3 +77,6 @@ application:
       version: 1.0
       title: "${spring.application.name} Rest API"
       description: "Spring Boot REST API for ${spring.application.name}"
+  client:
+    notification:
+      url: ${MS_NOTIFICATION_URL}
