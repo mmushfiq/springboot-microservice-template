@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/template-project/accounts")
+@RequestMapping("/template-project/v1/accounts")
 @RequiredArgsConstructor
 public class AccountController {
 

@@ -9,4 +9,8 @@ public interface JsonFiles {
     String UPDATE_ACCOUNT_REQUEST = "update-account-request.json";
     String UPDATE_ACCOUNT_RESPONSE = "update-account-response.json";
 
+    String SEND_EMAIL_REQUEST = "send-email-request.json";
+    String SEND_SMS_REQUEST = "send-sms-request.json";
+    String SEND_PUSH_REQUEST = "send-push-request.json";
+
 }

@@ -61,7 +61,7 @@ class AccountControllerTest {
         given(accountService.getAllAccounts()).willReturn(List.of(accountDto()));
 
         String expectedResult = json(GET_ALL_ACCOUNTS_RESPONSE);
-        mockMvc.perform(get(BASE_PATH + "/accounts")
+        mockMvc.perform(get(BASE_PATH + "/v1/accounts")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResult));
@@ -74,7 +74,7 @@ class AccountControllerTest {
         given(accountService.getAccount(ID)).willReturn(accountDto());
 
         String expectedResult = json(GET_ACCOUNT_RESPONSE);
-        mockMvc.perform(get(BASE_PATH + "/accounts/{id}", ID)
+        mockMvc.perform(get(BASE_PATH + "/v1/accounts/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResult));
@@ -87,7 +87,7 @@ class AccountControllerTest {
         given(accountService.createAccount(createAccountDto())).willReturn(accountDto());
 
         String expectedResult = json(CREATE_ACCOUNT_RESPONSE);
-        mockMvc.perform(post(BASE_PATH + "/accounts")
+        mockMvc.perform(post(BASE_PATH + "/v1/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json(CREATE_ACCOUNT_REQUEST)))
                 .andExpect(status().isCreated())
@@ -98,7 +98,7 @@ class AccountControllerTest {
 
     @Test
     void createAccount_Should_ThrowMethodArgumentNotValidException_When_HolderNameIsNotValid() throws Exception {
-        mockMvc.perform(post(BASE_PATH + "/accounts")
+        mockMvc.perform(post(BASE_PATH + "/v1/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(createAccountDtoWithWrongHolderName())))
                 .andExpect(status().isBadRequest())
@@ -113,7 +113,7 @@ class AccountControllerTest {
         given(accountService.updateAccount(accountDto)).willReturn(accountDto);
 
         String expectedResult = json(UPDATE_ACCOUNT_RESPONSE);
-        mockMvc.perform(put(BASE_PATH + "/accounts")
+        mockMvc.perform(put(BASE_PATH + "/v1/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json(UPDATE_ACCOUNT_REQUEST)))
                 .andExpect(status().isOk())
@@ -127,7 +127,7 @@ class AccountControllerTest {
     void deleteAccount_Should_ReturnSuccess() throws Exception {
         willDoNothing().given(accountService).deleteAccount(ID);
 
-        mockMvc.perform(delete(BASE_PATH + "/accounts/{id}", ID)
+        mockMvc.perform(delete(BASE_PATH + "/v1/accounts/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
