@@ -13,4 +13,6 @@ public interface JsonFiles {
     String SEND_SMS_REQUEST = "send-sms-request.json";
     String SEND_PUSH_REQUEST = "send-push-request.json";
 
+    String CREATE_PAYMENT_REQUEST = "create-payment-request.json";
+
 }

@@ -25,6 +25,24 @@ spring:
     password: postgres
     hikari:
       maximum-pool-size: 3
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+  data:
+    mongodb:
+      uri: mongodb://admin:password@localhost:27017/pn_template_project?authSource=admin
+    redis:
+      host: localhost
+      port: 6379
+      password:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: full
 
 application:
   client:

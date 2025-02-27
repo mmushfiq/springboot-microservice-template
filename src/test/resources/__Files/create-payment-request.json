@@ -1,0 +1,12 @@
+{
+  "paymentId": "PAY-1001",
+  "accountNumber": "123456789",
+  "amount": 150.75,
+  "currency": "USD",
+  "paymentMethod": "Credit Card",
+  "recipientName": "John Doe",
+  "recipientAccountNumber": "987654321",
+  "additionalData": {
+    "note": "Subscription payment"
+  }
+}

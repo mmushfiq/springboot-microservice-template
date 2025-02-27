@@ -1,0 +1,162 @@
+[
+  {
+    "id": "1",
+    "paymentId": "PAY-1001",
+    "accountNumber": "123456789",
+    "amount": 150.75,
+    "currency": "USD",
+    "paymentMethod": "Credit Card",
+    "recipientName": "John Doe",
+    "recipientAccountNumber": "987654321",
+    "additionalData": {
+      "reference": "INV-001",
+      "note": "Payment for services"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T10:15:30"
+  },
+  {
+    "id": "2",
+    "paymentId": "PAY-1002",
+    "accountNumber": "234567890",
+    "amount": 200.0,
+    "currency": "EUR",
+    "paymentMethod": "Bank Transfer",
+    "recipientName": "Alice Smith",
+    "recipientAccountNumber": "876543210",
+    "additionalData": {
+      "reference": "INV-002",
+      "note": "Payment for order #1234"
+    },
+    "status": "FAILED",
+    "createdAt": "2025-02-27T11:20:45"
+  },
+  {
+    "id": "3",
+    "paymentId": "PAY-1003",
+    "accountNumber": "345678901",
+    "amount": 75.5,
+    "currency": "GBP",
+    "paymentMethod": "PayPal",
+    "recipientName": "Robert Brown",
+    "recipientAccountNumber": "765432109",
+    "additionalData": {
+      "reference": "INV-003",
+      "note": "Subscription payment"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T12:30:00"
+  },
+  {
+    "id": "4",
+    "paymentId": "PAY-1004",
+    "accountNumber": "456789012",
+    "amount": 500.0,
+    "currency": "USD",
+    "paymentMethod": "Debit Card",
+    "recipientName": "Emily Johnson",
+    "recipientAccountNumber": "654321098",
+    "additionalData": {
+      "reference": "INV-004",
+      "note": "Freelance payment"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T13:45:10"
+  },
+  {
+    "id": "5",
+    "paymentId": "PAY-1005",
+    "accountNumber": "567890123",
+    "amount": 99.99,
+    "currency": "CAD",
+    "paymentMethod": "Credit Card",
+    "recipientName": "David Wilson",
+    "recipientAccountNumber": "543210987",
+    "additionalData": {
+      "reference": "INV-005",
+      "note": "E-commerce purchase"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T14:50:20"
+  },
+  {
+    "id": "6",
+    "paymentId": "PAY-1006",
+    "accountNumber": "678901234",
+    "amount": 700.0,
+    "currency": "JPY",
+    "paymentMethod": "Bank Transfer",
+    "recipientName": "Sarah Lee",
+    "recipientAccountNumber": "432109876",
+    "additionalData": {
+      "reference": "INV-006",
+      "note": "Business transaction"
+    },
+    "status": "FAILED",
+    "createdAt": "2025-02-27T15:05:35"
+  },
+  {
+    "id": "7",
+    "paymentId": "PAY-1007",
+    "accountNumber": "789012345",
+    "amount": 50.0,
+    "currency": "EUR",
+    "paymentMethod": "PayPal",
+    "recipientName": "James Taylor",
+    "recipientAccountNumber": "321098765",
+    "additionalData": {
+      "reference": "INV-007",
+      "note": "Gift payment"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T16:15:40"
+  },
+  {
+    "id": "8",
+    "paymentId": "PAY-1008",
+    "accountNumber": "890123456",
+    "amount": 75.25,
+    "currency": "USD",
+    "paymentMethod": "Credit Card",
+    "recipientName": "Laura Martinez",
+    "recipientAccountNumber": "210987654",
+    "additionalData": {
+      "reference": "INV-008",
+      "note": "Online course fee"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T17:30:25"
+  },
+  {
+    "id": "9",
+    "paymentId": "PAY-1009",
+    "accountNumber": "901234567",
+    "amount": 999.99,
+    "currency": "GBP",
+    "paymentMethod": "Debit Card",
+    "recipientName": "Oliver Harris",
+    "recipientAccountNumber": "109876543",
+    "additionalData": {
+      "reference": "INV-009",
+      "note": "Luxury purchase"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T18:45:55"
+  },
+  {
+    "id": "10",
+    "paymentId": "PAY-1010",
+    "accountNumber": "012345678",
+    "amount": 250.0,
+    "currency": "EUR",
+    "paymentMethod": "Bank Transfer",
+    "recipientName": "Sophia White",
+    "recipientAccountNumber": "987654321",
+    "additionalData": {
+      "reference": "INV-010",
+      "note": "Charity donation"
+    },
+    "status": "SUCCESS",
+    "createdAt": "2025-02-27T19:10:15"
+  }
+]
