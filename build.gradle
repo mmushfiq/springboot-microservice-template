@@ -81,6 +81,18 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     runtimeOnly "org.postgresql:postgresql"
     implementation "org.liquibase:liquibase-core"
+
+    /*** mongodb ***/
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
+    implementation "io.mongock:mongock:${mongockVersion}"
+    implementation "io.mongock:mongock-springboot-v3:${mongockVersion}"
+    implementation "io.mongock:mongodb-springdata-v4-driver:${mongockVersion}"
+
+    /*** redis ***/
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+
+    /*** rabbitmq ***/
+    implementation "org.springframework.boot:spring-boot-starter-amqp"
 }
 
 dependencyManagement {

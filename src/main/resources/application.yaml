@@ -50,6 +50,47 @@ spring:
     properties:
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+      client:
+        config:
+          default:
+            loggerLevel: basic
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASS}
+    listener:
+      simple:
+        missing-queues-fatal: false
+        observation-enabled: true
+        concurrency: 3
+        max-concurrency: 5
+        prefetch: 10
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 3s
+          max-interval: 10s
+          multiplier: 2
+          non-retryable-exceptions:
+            - com.company.project.template.exception.EventDataMismatchingException
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASS}
+    mongodb:
+      uri: mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST_PORT}/pn_template_project${MONGO_OPTIONS}
+      auto-index-creation: true
+
+mongock:
+  migration-scan-package:
+    - com.company.project.template.dao.migration
+  transactionEnabled: false
 
 jdbc:
   datasource-proxy:
@@ -77,6 +118,11 @@ application:
       version: 1.0
       title: "${spring.application.name} Rest API"
       description: "Spring Boot REST API for ${spring.application.name}"
+  cache:
+    prefix:
+      payment: "pn.payment."
+    ttl:
+      payment: 5
   client:
     notification:
       url: ${MS_NOTIFICATION_URL}
