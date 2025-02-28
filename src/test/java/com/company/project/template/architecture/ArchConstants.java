@@ -16,6 +16,7 @@ public final class ArchConstants {
     static final String MAPPER_PKG = "..mapper..";
     static final String DTO_PKG = "..dto..";
     static final String MESSAGING_PKG = "..messaging..";
+    static final String SCHEDULER_PKG = "..scheduler..";
 
     //---  Layers ---//
     static final String CONTROLLER_LAYER = "Controller";
@@ -23,6 +24,7 @@ public final class ArchConstants {
     static final String DAO_LAYER = "Dao";
     static final String MAPPER_LAYER = "Mapper";
     static final String MESSAGING_LAYER = "Messaging";
+    static final String SCHEDULER_LAYER = "Scheduler";
 
     //---  Suffixes ---//
     static final String CONFIGURATION_SUFFIX = "Config";

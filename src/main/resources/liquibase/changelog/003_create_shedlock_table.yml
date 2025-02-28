@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003_create_shedlock_table
+      author: Mushfig Mammadov
+      changes:
+        - createTable:
+            tableName: shedlock
+            columns:
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: lock_until
+                  type: TIMESTAMP(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: locked_at
+                  type: TIMESTAMP(3)
+                  defaultValueDate: CURRENT_TIMESTAMP(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: locked_by
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+            remarks: shedlock table to show scheduler lock information.

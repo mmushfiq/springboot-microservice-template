@@ -17,6 +17,7 @@ import com.company.project.template.messaging.MessageProducer;
 import com.company.project.template.model.dto.PaymentDto;
 import com.company.project.template.model.dto.PaymentResponseDto;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -65,12 +66,19 @@ public class PaymentService {
             throw new EventDataMismatchingException("eventId can not be blank");
         }
 
-        String status  = baseResultEvent.getResult() == Result.SUCCESS ? "SUCCESS" : "FAILED";
+        String status = baseResultEvent.getResult() == Result.SUCCESS ? "SUCCESS" : "FAILED";
         PaymentLogDocument paymentLogDocument =
                 PaymentMapper.INSTANCE.toDocument(baseResultEvent.getPayload(), status);
         paymentLogRepository.insert(paymentLogDocument);
         log.info("Payment execution was completed and data saved to database, paymentExecutionId: {}",
                 baseResultEvent.getEventId());
+    }
+
+    public void sendHourlyPaymentReport() {
+        List<PaymentLogDocument> hourlyPaymentList =
+                paymentLogRepository.findByCreatedAtAfter(LocalDateTime.now().minusHours(1));
+        // todo: send hourly payment report to email
+        log.info("Hourly payment report is being sent, payment count: {}", hourlyPaymentList.size());
     }
 
 }
