@@ -93,6 +93,10 @@ dependencies {
 
     /*** rabbitmq ***/
     implementation "org.springframework.boot:spring-boot-starter-amqp"
+
+    /*** scheduler ***/
+    implementation "net.javacrumbs.shedlock:shedlock-spring:${shedlockVersion}"
+    implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:${shedlockVersion}"
 }
 
 dependencyManagement {

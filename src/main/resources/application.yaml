@@ -126,3 +126,6 @@ application:
   client:
     notification:
       url: ${MS_NOTIFICATION_URL}
+  scheduler:
+    enabled: true
+    payment-report-cron: '0 0 * * * *'  # every hour
