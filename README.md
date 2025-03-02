@@ -53,6 +53,27 @@ docker-compose up
 
 This will create **PostgreSQL, MongoDB, Redis, RabbitMQ, and Jaeger** containers.
 
+### Setting Up the Common Library Dependency
+
+The **springboot-microservice-common-lib** dependency is not yet available in a central repository. To use it, you need to pull it from the GitHub package repository, which requires a **GPR_TOKEN**. Since this token is private and user-specific, it cannot be shared in this repository.
+
+To include the dependency locally, follow these steps:
+
+1. Clone the `springboot-microservice-common-lib` repository:
+   ```sh
+   git clone https://github.com/mmushfiq/springboot-microservice-common-lib.git
+   ```
+2. Navigate to the cloned directory:
+   ```sh
+   cd springboot-microservice-common-lib
+   ```
+3. Publish the library to your local Maven repository using Gradle:
+   ```sh
+   ./gradlew publishToMavenLocal
+   ```
+
+After completing these steps, the dependency will be available in your local Maven repository and can be used by this microservice.
+
 ### Running the Application
 
 Run the application with the `local` profile. You can do this via IntelliJ IDEA run configurations or using the Gradle command:

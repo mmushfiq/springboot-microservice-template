@@ -30,14 +30,11 @@ repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
     maven {
-        name "GitLab"
-        url "https://gitlab.company.com/api/v4/groups/${gitlabGroupId}/-/packages/maven"
-        credentials(HttpHeaderCredentials) {
-            name = 'Deploy-Token'
-            value = gitlabDeployToken
-        }
-        authentication {
-            header(HttpHeaderAuthentication)
+        name = "GitHub"
+        url = uri("https://maven.pkg.github.com/mmushfiq/springboot-microservice-common-lib")
+        credentials {
+            username = System.getenv("GPR_USER") ?: project.findProperty("gpr.user") ?: ""
+            password = System.getenv("GPR_TOKEN") ?: project.findProperty("gpr.token") ?: ""
         }
     }
 }
@@ -161,7 +158,7 @@ jacocoTestReport {
     }
 }
 
-tasks.named('sonarqube'){
+tasks.named('sonarqube') {
     dependsOn test
 }
 
