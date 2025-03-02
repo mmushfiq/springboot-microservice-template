@@ -16,6 +16,8 @@ This is a template Spring Boot microservice implemented using **Spring Boot 3.3*
 
 `{PN}` - _project name or project name abbreviation_
 
+**Note:** This repository does not represent real-world business scenarios; the examples are solely intended to demonstrate the usage of various technologies.
+
 ## Technologies and Tools Used
 
 This template integrates multiple tools and frameworks, including:
