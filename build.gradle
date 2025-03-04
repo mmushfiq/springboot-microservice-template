@@ -19,7 +19,9 @@ java {
 def pnCommonLibVersion = System.getenv("PN_COMMON_LIB_VERSION") ?: "0.0.1" // Default version
 println "\u001B[32mpnCommonLibVersion version is ${pnCommonLibVersion}\u001B[0m"
 
-println "GPR_TOKEN version is ${System.getenv("GPR_TOKEN")} "
+println "GPR_USER: ${System.getenv('GPR_USER')}"
+println "GPR_TOKEN: ${System.getenv('GPR_TOKEN')}"
+println "PN_COMMON_LIB_VERSION: ${pnCommonLibVersion}"
 
 configurations {
     compileOnly {
