@@ -37,6 +37,7 @@ repositories {
         credentials {
             username = System.getenv("GPR_USER") ?: project.findProperty("gpr.user") ?: ""
             password = System.getenv("GPR_TOKEN") ?: project.findProperty("gpr.token") ?: ""
+            println "username: ${username} password: ${password}"
         }
     }
 }
