@@ -19,6 +19,8 @@ java {
 def pnCommonLibVersion = System.getenv("PN_COMMON_LIB_VERSION") ?: "0.0.1" // Default version
 println "\u001B[32mpnCommonLibVersion version is ${pnCommonLibVersion}\u001B[0m"
 
+println "GPR_TOKEN version is ${System.getenv("GPR_TOKEN")} "
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
