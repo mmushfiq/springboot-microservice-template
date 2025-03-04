@@ -29,5 +29,7 @@ jobs:
       - name: Build the project
         run: ./gradlew build
 
-      - name: Set up environment variables
-        run: echo "GPR_TOKEN=${{ secrets.GPR_TOKEN }}" >> $GITHUB_ENV
+      - name: Print Environment Variables
+        run: |
+          echo "GPR_USER: $GPR_USER"
+          echo "GPR_TOKEN: $GPR_TOKEN"
