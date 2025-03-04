@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
 
   postgres:
@@ -30,21 +32,14 @@ services:
     command: redis-server
 
   rabbitmq:
-    image: rabbitmq:3.12-management
     container_name: rabbitmq
-    restart: unless-stopped
+    image: rabbitmq:3.9-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USERNAME:-root}"
-      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD:-root}"
-    command: >
-      sh -c "rabbitmq-plugins enable --offline \
-      rabbitmq_amqp1_0 rabbitmq_management rabbitmq_web_dispatch rabbitmq_management_agent rabbitmq_stomp && \
-      exec rabbitmq-server"
-    volumes:
-      - "./rabbitmq-config:/etc/rabbitmq"
 
   jaeger:
     container_name: jaeger
