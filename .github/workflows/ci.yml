@@ -13,6 +13,10 @@ jobs:
     name: Build with Gradle
     runs-on: ubuntu-latest
 
+    env:
+      GPR_USER: ${{ secrets.GPR_USER }}
+      GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
