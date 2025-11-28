@@ -11,23 +11,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.company.project.common.config.OpenTelemetryConfig;
-import com.company.project.template.config.CommonLibScannerConfig;
 import com.company.project.template.model.dto.PaymentDto;
 import com.company.project.template.service.PaymentService;
-import io.micrometer.tracing.Tracer;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = PaymentController.class)
-@Import({CommonLibScannerConfig.class})
-@MockBean({Tracer.class, OpenTelemetryConfig.class})
 class PaymentControllerTest {
 
     @Autowired
