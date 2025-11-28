@@ -10,21 +10,15 @@ import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.company.project.common.config.OpenTelemetryConfig;
-import com.company.project.template.config.CommonLibScannerConfig;
 import com.company.project.template.service.NotificationService;
-import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = NotificationController.class)
-@Import({CommonLibScannerConfig.class})
-@MockBean({Tracer.class, OpenTelemetryConfig.class})
 class NotificationControllerTest {
 
     @Autowired
