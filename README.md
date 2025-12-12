@@ -36,6 +36,9 @@ This template integrates multiple tools and frameworks, including:
 - **OpenTelemetry** - Observability and distributed tracing.
 - **JUnit 5** - Unit testing framework.
 - **ArchUnit** - Architecture rule validation.
+- **TestContainers** - Integration testing with real infrastructure dependencies.
+- **WireMock** - Mocking external HTTP services for testing.
+- **Awaitility** - Testing asynchronous operations.
 
 ## Running the Application Locally
 
@@ -89,6 +92,89 @@ Run the application with the `local` profile. You can do this via IntelliJ IDEA 
 Swagger UI is available at:
 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+## Testing
+
+This project includes comprehensive testing at multiple levels:
+
+### Unit Tests
+
+Located in `src/test/java`, unit tests use Mockito for mocking dependencies and test individual components in isolation.
+
+Run unit tests:
+```sh
+./gradlew test
+```
+
+### Integration Tests
+
+Located in `src/integrationTest/java`, integration tests use **TestContainers** to spin up real infrastructure dependencies (PostgreSQL, MongoDB, Redis, RabbitMQ) in Docker containers. These tests verify the full integration stack including:
+
+- **Controller Integration Tests** - Test HTTP endpoints with real database interactions
+- **Message Consumer Tests** - Test RabbitMQ message consumption and MongoDB persistence
+- **External Service Tests** - Test OpenFeign clients with WireMock mocking
+- **End-to-End Tests** - Test complete business flows across all infrastructure components
+
+#### Running Integration Tests
+
+**Prerequisites:**
+- Docker must be running on your machine
+- TestContainers will automatically download and start the required Docker images
+
+Run integration tests:
+```sh
+./gradlew integrationTest
+```
+
+Run all tests (unit + integration):
+```sh
+./gradlew check
+```
+
+#### Integration Test Infrastructure
+
+Integration tests use the following TestContainers:
+- **PostgreSQL 16** - For account data persistence with Liquibase migrations
+- **MongoDB 7.0** - For payment log storage with document-based data
+- **Redis 7.4** - For payment caching with TTL
+- **RabbitMQ 3.13** - For event-driven message processing
+
+All containers are configured with `reuse=true` for faster test execution across multiple test classes.
+
+#### Test Organization
+
+```
+src/integrationTest/
+├── java/
+│   └── com/company/project/template/
+│       ├── BaseIntegrationTest.java                    # Base class with TestContainers setup
+│       ├── controller/
+│       │   ├── AccountControllerIntegrationTest.java   # Account CRUD with PostgreSQL
+│       │   └── PaymentControllerIntegrationTest.java   # Payment creation/execution with Redis
+│       ├── messaging/
+│       │   └── MessageConsumerIntegrationTest.java     # RabbitMQ consumer with MongoDB
+│       ├── client/
+│       │   └── NotificationClientIntegrationTest.java  # OpenFeign client with WireMock
+│       └── EndToEndPaymentFlowIntegrationTest.java     # Complete payment flow
+└── resources/
+    └── application.yaml                                 # Test-specific configuration
+```
+
+#### Key Integration Test Features
+
+1. **HTTP Testing** - Uses `TestRestTemplate` to test REST controllers with full Spring context
+2. **Database Testing** - Verifies Liquibase migrations and data persistence
+3. **Cache Testing** - Tests Redis caching with TTL and serialization
+4. **Message Queue Testing** - Validates RabbitMQ message publishing, consumption, and retry logic
+5. **External Service Mocking** - Uses WireMock to simulate external notification service
+6. **Asynchronous Testing** - Uses Awaitility for testing async message consumption
+
+### Architecture Tests
+
+ArchUnit tests validate architectural rules and layering principles:
+```sh
+./gradlew test --tests *ArchitectureTest
+```
 
 ## Additional Tools
 

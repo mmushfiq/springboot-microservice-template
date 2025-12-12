@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: ms-template-project-integration-test
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.tracing.OpenTelemetryAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.tracing.BraveAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.observation.ObservationAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.observation.web.servlet.WebMvcObservationAutoConfiguration
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:liquibase/changelog-master.yaml
+
+  data:
+    mongodb:
+      auto-index-creation: true
+
+  rabbitmq:
+    listener:
+      simple:
+        auto-startup: false  # Disable auto-startup for integration tests to prevent early connection attempts
+        retry:
+          enabled: true
+          max-attempts: 3
+          non-retryable-exceptions:
+            - com.company.project.template.exception.EventDataMismatchingException
+
+application:
+  cache:
+    prefix:
+      payment: "pn.payment."
+    ttl:
+      payment: 300000 # 5 minutes
+
+  client:
+    notification:
+      url: http://localhost:8089
+
+  rabbitmq:
+    exchange:
+      payment-notification: x.pn.payment
+      dead-letter: x.dlx.pn
+    queue:
+      execute-payment-result: q.execute.payment.result
+      dead-letter-execute-payment-result: dlq.execute.payment.result
+    routing-key:
+      execute-payment: k.execute.payment
+      execute-payment-result: k.execute.payment.result
+
+# Disable OpenTelemetry and observations for integration tests
+management:
+  tracing:
+    enabled: false
+  otlp:
+    tracing:
+      endpoint: ""
+  metrics:
+    export:
+      prometheus:
+        enabled: false
+  observations:
+    enabled: false
+
+# Disable Mongock migrations for most tests (can be enabled per test if needed)
+mongock:
+  enabled: false
+
+# Disable scheduling for integration tests by default
+scheduler:
+  enabled: false
+
+logging:
+  level:
+    root: INFO
+    com.company.project.template: DEBUG
+    org.springframework.amqp: WARN
+    org.springframework.data.mongodb: WARN
+    org.testcontainers: INFO
+    com.github.dockerjava: WARN

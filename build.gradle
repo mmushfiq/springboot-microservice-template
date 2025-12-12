@@ -23,6 +23,21 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            srcDir 'src/integrationTest/java'
+        }
+        resources {
+            srcDir 'src/integrationTest/resources'
+        }
+        compileClasspath += sourceSets.main.output + sourceSets.test.output
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+    }
 }
 
 repositories {
@@ -68,6 +83,18 @@ dependencies {
 
     implementation "com.company.project:springboot-microservice-common-lib:${pnCommonLibVersion}"
     testImplementation "com.tngtech.archunit:archunit-junit5:${archUnitVersion}"
+
+    /*** integration test dependencies ***/
+    integrationTestImplementation "org.springframework.boot:spring-boot-starter-test"
+    integrationTestImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
+    integrationTestImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
+    integrationTestImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    integrationTestImplementation "org.testcontainers:mongodb:${testcontainersVersion}"
+    integrationTestImplementation "org.testcontainers:rabbitmq:${testcontainersVersion}"
+    integrationTestImplementation "org.wiremock:wiremock-standalone:${wiremockVersion}"
+    integrationTestImplementation "org.awaitility:awaitility:${awaitilityVersion}"
+    integrationTestCompileOnly "org.projectlombok:lombok"
+    integrationTestAnnotationProcessor "org.projectlombok:lombok"
     implementation "net.logstash.logback:logstash-logback-encoder:${logstashLogbackVersion}"
     implementation "commons-io:commons-io:${commonsIoVersion}"
     implementation "com.google.guava:guava:${guavaVersion}"
@@ -115,6 +142,7 @@ checkstyle {
 
 checkstyleMain.dependsOn extractCheckstyleConfigFromCommonLib
 checkstyleTest.dependsOn extractCheckstyleConfigFromCommonLib
+checkstyleIntegrationTest.dependsOn extractCheckstyleConfigFromCommonLib
 
 test {
     useJUnitPlatform()
@@ -123,6 +151,28 @@ test {
     }
     finalizedBy jacocoTestReport
 }
+
+tasks.register('integrationTest', Test) {
+    description = 'Runs integration tests with TestContainers.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    shouldRunAfter test
+
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
+    // Ensure Docker is available for TestContainers
+    doFirst {
+        println "Running integration tests with TestContainers..."
+    }
+}
+
+// Make check task depend on integrationTest
+check.dependsOn integrationTest
 
 jacocoTestReport {
     reports {
@@ -179,6 +229,10 @@ processResources {
                 }
         }
     }
+    duplicatesStrategy = 'INCLUDE'
+}
+
+processIntegrationTestResources {
     duplicatesStrategy = 'INCLUDE'
 }
 
