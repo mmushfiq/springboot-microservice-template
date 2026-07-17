@@ -26,25 +26,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.company.project.common.config.OpenTelemetryConfig;
-import com.company.project.template.config.CommonLibScannerConfig;
 import com.company.project.template.exception.constant.ErrorCode;
 import com.company.project.template.model.dto.AccountDto;
 import com.company.project.template.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micrometer.tracing.Tracer;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = AccountController.class)
-@Import({CommonLibScannerConfig.class})
-@MockBean({Tracer.class, OpenTelemetryConfig.class})
 class AccountControllerTest {
 
     @Autowired
