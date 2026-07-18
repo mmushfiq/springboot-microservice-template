@@ -15,7 +15,7 @@ FROM registry.company.com/gitops/templates:gradle-8-jre-21
 WORKDIR /app
 
 # Install wget for healthchecks since Alpine is minimal
-RUN apk add --no-cache curl wget
+RUN apk add --no-cache wget
 
 # Copy extracted layers with correct ownership.
 # Layer ordering is crucial: dependencies change least often, application code most often.
