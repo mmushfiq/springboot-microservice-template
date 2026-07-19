@@ -1,55 +1,106 @@
-version: '3.9'
-
 services:
 
   postgres:
+    image: postgres:16-alpine
     container_name: postgres
-    image: postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
 
   mongodb:
+    image: mongo:7.0
     container_name: mongodb
-    image: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
 
   redis:
+    image: redis:7.2-alpine
     container_name: redis
-    image: "redis:alpine"
     ports:
       - "6379:6379"
     restart: always
     command: redis-server
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
 
   rabbitmq:
+    image: rabbitmq:3.13-management-alpine
     container_name: rabbitmq
-    image: rabbitmq:3.9-management-alpine
-    environment:
-      RABBITMQ_DEFAULT_USER: "admin"
-      RABBITMQ_DEFAULT_PASS: "admin"
+    restart: unless-stopped
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USERNAME:-root}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD:-root}"
+      RABBITMQ_MANAGEMENT_AGENT_DISABLE_METRICS_COLLECTOR: "false"
+    volumes:
+      - "./rabbitmq-config:/etc/rabbitmq"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+    command: >
+      sh -c "rabbitmq-plugins enable --offline \
+      rabbitmq_amqp1_0 rabbitmq_management rabbitmq_web_dispatch rabbitmq_management_agent rabbitmq_stomp && \
+      exec rabbitmq-server"
 
   jaeger:
+    image: jaegertracing/all-in-one:1.60
     container_name: jaeger
-    image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686" # jaeger UI
       - "4317:4317"   # collector grpc
       - "4318:4318"   # collector http
     environment:
       - COLLECTOR_OTLP_ENABLED=true
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
 
 volumes:
   mongodb_data:

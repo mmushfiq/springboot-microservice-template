@@ -117,6 +117,7 @@ checkstyleMain.dependsOn extractCheckstyleConfigFromCommonLib
 checkstyleTest.dependsOn extractCheckstyleConfigFromCommonLib
 
 test {
+    maxParallelForks = Math.max(Runtime.runtime.availableProcessors().intdiv(2), 1)
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
