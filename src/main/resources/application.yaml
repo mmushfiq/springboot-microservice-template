@@ -35,9 +35,17 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASS}
     hikari:
-      poolName: MsTemplateProjectHikariPool
+      pool-name: "${HOSTNAME:${spring.application.name}}-pool"
+      maximum-pool-size: ${HIKARICP_MAX_POOL_SIZE:10}
+      minimum-idle: ${HIKARICP_MIN_IDLE:10}
+      connection-timeout: ${HIKARICP_CONNECTION_TIMEOUT:30000}
+      idle-timeout: ${HIKARICP_IDLE_TIMEOUT:600000}
+      max-lifetime: ${HIKARICP_MAX_LIFETIME:1800000}
+      keepalive-time: ${HIKARICP_KEEPALIVE_TIME:120000}
+      leak-detection-threshold: ${HIKARICP_LEAK_DETECTION_THRESHOLD:0}
       auto-commit: false
-      maximum-pool-size: ${HIKARICP_DEFAULT_POOL_SIZE}
+      data-source-properties:
+        ApplicationName: "${HOSTNAME:${spring.application.name}}"
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
